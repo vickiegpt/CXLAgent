@@ -1,0 +1,15 @@
+[flake8]
+max-line-length = 100
+extend-ignore = E203, W503
+exclude =
+    .git,
+    __pycache__,
+    *.egg-info,
+    build,
+    dist,
+    .venv,
+    venv,
+    .pytest_cache
+# Existing source files have pre-existing style issues that are out of scope
+per-file-ignores =
+    cxlagent/*.py: E501, E127, F401, F541, F841
