@@ -9,6 +9,13 @@ setup(
     install_requires=[
         "anthropic>=0.20.0",
     ],
+    extras_require={
+        "dev": [
+            "pytest>=7.0",
+            "pytest-cov>=4.0",
+            "flake8>=6.0",
+        ],
+    },
     entry_points={
         "console_scripts": [
             "cxlagent=cxlagent.cli:main",

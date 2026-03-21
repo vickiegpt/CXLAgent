@@ -1,9 +1,0 @@
-Metadata-Version: 2.4
-Name: cxlagent
-Version: 0.1.0
-Summary: CXL Memory Snooping & Analysis Agent
-Requires-Python: >=3.10
-Requires-Dist: anthropic>=0.20.0
-Dynamic: requires-dist
-Dynamic: requires-python
-Dynamic: summary
