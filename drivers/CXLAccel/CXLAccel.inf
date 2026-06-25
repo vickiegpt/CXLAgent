@@ -1,0 +1,73 @@
+;++
+;   Copyright (c) 2025 CXLAgent Project
+;
+;   Module Name:
+;
+;       CXLAccel.inf
+;
+;   Abstract:
+;
+;       INF file for CXL Accelerator Driver
+;
+;--
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=System
+ClassGuid={4D36E97D-E325-11CE-BFC1-08002BE10318}
+Provider=%ManufacturerName%
+DriverVer=01/01/2025,1.0.0.0
+CatalogFile=CXLAccel.cat
+
+[DestinationDirs]
+DefaultDestDir = 12
+CXLAccel_Device_CopyFiles = 12
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+CXLAccel.sys = 1,,
+
+[Manufacturer]
+%ManufacturerName%=Standard,NTamd64
+
+[Standard.NTamd64]
+%CXLAccel.DeviceDesc%=CXLAccel_Device, Root\CXLAccel
+
+[CXLAccel_Device]
+CopyFiles=CXLAccel_Device_CopyFiles
+
+[CXLAccel_Device_CopyFiles]
+CXLAccel.sys
+
+[CXLAccel_Device.HW]
+AddReg=CXLAccel_Device_HW_AddReg
+
+[CXLAccel_Device_HW_AddReg]
+HKR,,"Enum",0x00010001,1
+HKR,,"DeviceType",0x00010001,0x0003 ; Accelerator Device
+
+[CXLAccel_Device.Services]
+AddService=CXLAccel,0x00000002,CXLAccel_Service_Inst
+
+[CXLAccel_Service_Inst]
+DisplayName    = %CXLAccel.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\CXLAccel.sys
+
+AddReg = CXLAccel_Service_Parameter_AddReg
+
+[CXLAccel_Service_Parameter_AddReg]
+HKR, "Parameters", "WorkQueueDepth", 0x00010001, 16
+HKR, "Parameters", "DmaSupported", 0x00010001, 1
+HKR, "Parameters", "InterruptSupported", 0x00010001, 1
+HKR, "Parameters", "DefaultBitstream", 0x00000002, "\SystemRoot\System32\drivers\fpga.bit"
+
+[Strings]
+ManufacturerName="CXLAgent Project"
+DiskName = "CXL Accelerator Driver Installation Disk"
+CXLAccel.DeviceDesc = "CXL Accelerator Driver"
+CXLAccel.SVCDESC = "CXL Accelerator Driver Service"

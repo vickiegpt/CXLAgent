@@ -1,0 +1,73 @@
+;++
+;   Copyright (c) 2025 CXLAgent Project
+;
+;   Module Name:
+;
+;       CXLMemory.inf
+;
+;   Abstract:
+;
+;       INF file for CXL Memory Driver
+;
+;--
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=System
+ClassGuid={4D36E97D-E325-11CE-BFC1-08002BE10318}
+Provider=%ManufacturerName%
+DriverVer=01/01/2025,1.0.0.0
+CatalogFile=CXLMemory.cat
+
+[DestinationDirs]
+DefaultDestDir = 12
+CXLMemory_Device_CopyFiles = 12
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+CXLMemory.sys = 1,,
+
+[Manufacturer]
+%ManufacturerName%=Standard,NTamd64
+
+[Standard.NTamd64]
+%CXLMemory.DeviceDesc%=CXLMemory_Device, Root\CXLMemory
+
+[CXLMemory_Device]
+CopyFiles=CXLMemory_Device_CopyFiles
+
+[CXLMemory_Device_CopyFiles]
+CXLMemory.sys
+
+[CXLMemory_Device.HW]
+AddReg=CXLMemory_Device_HW_AddReg
+
+[CXLMemory_Device_HW_AddReg]
+HKR,,"Enum",0x00010001,1
+HKR,,"DeviceType",0x00010001,0x0002 ; Memory Device
+
+[CXLMemory_Device.Services]
+AddService=CXLMemory,0x00000002,CXLMemory_Service_Inst
+
+[CXLMemory_Service_Inst]
+DisplayName    = %CXLMemory.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\CXLMemory.sys
+
+AddReg = CXLMemory_Service_Parameter_AddReg
+
+[CXLMemory_Service_Parameter_AddReg]
+HKR, "Parameters", "TotalSize", 0x00010001, 17179869184 ; 16GB
+HKR, "Parameters", "RamSize", 0x00010001, 8589934592 ; 8GB
+HKR, "Parameters", "PmemSize", 0x00010001, 8589934592 ; 8GB
+HKR, "Parameters", "NumaNode", 0x00010001, 1
+
+[Strings]
+ManufacturerName="CXLAgent Project"
+DiskName = "CXL Memory Driver Installation Disk"
+CXLMemory.DeviceDesc = "CXL Memory Driver"
+CXLMemory.SVCDESC = "CXL Memory Driver Service"

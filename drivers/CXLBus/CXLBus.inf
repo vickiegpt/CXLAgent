@@ -1,0 +1,71 @@
+;++
+;   Copyright (c) 2025 CXLAgent Project
+;
+;   Module Name:
+;
+;       CXLBus.inf
+;
+;   Abstract:
+;
+;       INF file for CXL Bus Driver
+;
+;--
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=System
+ClassGuid={4D36E97D-E325-11CE-BFC1-08002BE10318}
+Provider=%ManufacturerName%
+DriverVer=01/01/2025,1.0.0.0
+CatalogFile=CXLBus.cat
+
+[DestinationDirs]
+DefaultDestDir = 12
+CXLBus_Device_CopyFiles = 12
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+CXLBus.sys = 1,,
+
+[Manufacturer]
+%ManufacturerName%=Standard,NTamd64
+
+[Standard.NTamd64]
+%CXLBus.DeviceDesc%=CXLBus_Device, Root\CXLBus
+
+[CXLBus_Device]
+CopyFiles=CXLBus_Device_CopyFiles
+
+[CXLBus_Device_CopyFiles]
+CXLBus.sys
+
+[CXLBus_Device.HW]
+AddReg=CXLBus_Device_HW_AddReg
+
+[CXLBus_Device_HW_AddReg]
+HKR,,"Enum",0x00010001,1
+HKR,,"BusType",0x00010001,0x0C ; CXL Bus Type
+
+[CXLBus_Device.Services]
+AddService=CXLBus,0x00000002,CXLBus_Service_Inst
+
+[CXLBus_Service_Inst]
+DisplayName    = %CXLBus.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\CXLBus.sys
+
+AddReg = CXLBus_Service_Parameter_AddReg
+
+[CXLBus_Service_Parameter_AddReg]
+HKR, "Parameters", "AutoEnumerate", 0x00010001, 1
+HKR, "Parameters", "ScanInterval", 0x00010001, 5
+
+[Strings]
+ManufacturerName="CXLAgent Project"
+DiskName = "CXL Bus Driver Installation Disk"
+CXLBus.DeviceDesc = "CXL Bus Driver"
+CXLBus.SVCDESC = "CXL Bus Driver Service"

@@ -1,0 +1,71 @@
+;++
+;   Copyright (c) 2025 CXLAgent Project
+;
+;   Module Name:
+;
+;       PhysMem.inf
+;
+;   Abstract:
+;
+;       INF file for Physical Memory Access Driver
+;
+;--
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=System
+ClassGuid={4D36E97D-E325-11CE-BFC1-08002BE10318}
+Provider=%ManufacturerName%
+DriverVer=01/01/2025,1.0.0.0
+CatalogFile=PhysMem.cat
+
+[DestinationDirs]
+DefaultDestDir = 12
+PhysMem_Device_CopyFiles = 12
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+PhysMem.sys = 1,,
+
+[Manufacturer]
+%ManufacturerName%=Standard,NTamd64
+
+[Standard.NTamd64]
+%PhysMem.DeviceDesc%=PhysMem_Device, Root\PhysMem
+
+[PhysMem_Device]
+CopyFiles=PhysMem_Device_CopyFiles
+
+[PhysMem_Device_CopyFiles]
+PhysMem.sys
+
+[PhysMem_Device.HW]
+AddReg=PhysMem_Device_HW_AddReg
+
+[PhysMem_Device_HW_AddReg]
+HKR,,"Enum",0x00010001,1
+HKR,,"DeviceType",0x00010001,0x0001 ; Physical Memory Access
+
+[PhysMem_Device.Services]
+AddService=PhysMem,0x00000002,PhysMem_Service_Inst
+
+[PhysMem_Service_Inst]
+DisplayName    = %PhysMem.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\PhysMem.sys
+
+AddReg = PhysMem_Service_Parameter_AddReg
+
+[PhysMem_Service_Parameter_AddReg]
+HKR, "Parameters", "SecurityEnabled", 0x00010001, 1
+HKR, "Parameters", "AllowOnlyCXLWindows", 0x00010001, 1
+
+[Strings]
+ManufacturerName="CXLAgent Project"
+DiskName = "CXL Physical Memory Access Driver Installation Disk"
+PhysMem.DeviceDesc = "CXL Physical Memory Access Driver"
+PhysMem.SVCDESC = "CXL Physical Memory Access Driver Service"

@@ -1,0 +1,72 @@
+;++
+;   Copyright (c) 2025 CXLAgent Project
+;
+;   Module Name:
+;
+;       CXLCache.inf
+;
+;   Abstract:
+;
+;       INF file for CXL Cache Driver
+;
+;--
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=System
+ClassGuid={4D36E97D-E325-11CE-BFC1-08002BE10318}
+Provider=%ManufacturerName%
+DriverVer=01/01/2025,1.0.0.0
+CatalogFile=CXLCache.cat
+
+[DestinationDirs]
+DefaultDestDir = 12
+CXLCache_Device_CopyFiles = 12
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+CXLCache.sys = 1,,
+
+[Manufacturer]
+%ManufacturerName%=Standard,NTamd64
+
+[Standard.NTamd64]
+%CXLCache.DeviceDesc%=CXLCache_Device, Root\CXLCache
+
+[CXLCache_Device]
+CopyFiles=CXLCache_Device_CopyFiles
+
+[CXLCache_Device_CopyFiles]
+CXLCache.sys
+
+[CXLCache_Device.HW]
+AddReg=CXLCache_Device_HW_AddReg
+
+[CXLCache_Device_HW_AddReg]
+HKR,,"Enum",0x00010001,1
+HKR,,"DeviceType",0x00010001,0x0001 ; Cache Device
+
+[CXLCache_Device.Services]
+AddService=CXLCache,0x00000002,CXLCache_Service_Inst
+
+[CXLCache_Service_Inst]
+DisplayName    = %CXLCache.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\CXLCache.sys
+
+AddReg = CXLCache_Service_Parameter_AddReg
+
+[CXLCache_Service_Parameter_AddReg]
+HKR, "Parameters", "CacheSize", 0x00010001, 134217728 ; 128MB default
+HKR, "Parameters", "WbinvdSupported", 0x00010001, 1
+HKR, "Parameters", "AutoFlush", 0x00010001, 1
+
+[Strings]
+ManufacturerName="CXLAgent Project"
+DiskName = "CXL Cache Driver Installation Disk"
+CXLCache.DeviceDesc = "CXL Cache Driver"
+CXLCache.SVCDESC = "CXL Cache Driver Service"
