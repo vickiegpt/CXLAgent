@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: GPL-2.0
+# Kbuild file for CXL Type 2 drivers
+
+# Main objects
+obj-m := cxl_type2_accel.o cxl_type2_cache.o cxl_type2_mem.o
+
+# Tracepoints (built into accel module)
+cxl_type2_accel-objs := cxl_accel_main.o cxl_tracepoints.o
